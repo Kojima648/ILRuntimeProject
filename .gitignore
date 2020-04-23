@@ -32,6 +32,13 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+.idea/
+/Assets/QFramework/
+/Assets/QFramework.meta
+
+/Assets/QFrameworkData/
+/Assets/QFrameworkData.meta
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
