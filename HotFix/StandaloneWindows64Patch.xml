@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patches xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1">
+  <Files Name="attack" Url="0.1/1/attack" Platform="StandaloneWindows64" MD5="3e3afb84553a6af5ed697f2d55c22433" Size="653.630859" />
+  <Files Name="StandaloneWindows64" Url="0.1/1/StandaloneWindows64" Platform="StandaloneWindows64" MD5="762e1b3eabad8ddda3dd19de2bb1803a" Size="1.83105469" />
+</Patches>

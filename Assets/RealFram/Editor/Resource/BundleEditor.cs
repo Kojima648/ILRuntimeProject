@@ -202,7 +202,7 @@ public class BundleEditor
     }
 
     /// <summary>
-    /// 拷贝筛选出来的AB包，生成XML配置文件
+    /// 拷贝筛选的AB包及自动生成服务器配置表
     /// </summary>
     /// <param name="changeList">改变后的列表</param>
     /// <param name="hotCount">热更次数</param>
@@ -223,6 +223,27 @@ public class BundleEditor
                 File.Copy(m_BunleTargetPath + "/" + s, m_hotFixPath + "/" + s);
             }
         }
+        
+        //生成服务器Patch
+        DirectoryInfo directoryInfo = new DirectoryInfo(m_hotFixPath);
+        FileInfo[] files = directoryInfo.GetFiles("*",SearchOption.AllDirectories);
+        Patches patches = new Patches();
+        patches.Version = 1;
+        patches.Files = new List<Patch>();
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            Patch patch = new Patch();
+            patch.MD5 = MD5Manager.Instance.BuildFileMd5(files[i].FullName);
+            patch.Name = files[i].Name;
+            patch.Size = files[i].Length / 1024.0f;
+            patch.Platform = EditorUserBuildSettings.activeBuildTarget.ToString();
+            patch.Url = "" + PlayerSettings.bundleVersion + "/" + hotCount + "/" + files[i].Name;
+            patches.Files.Add(patch);
+        }
+
+        BinarySerializeOpt.Xmlserialize(m_hotFixPath + "Patch.xml", patches);
+
     }
 
     static void WriteABMD5()
