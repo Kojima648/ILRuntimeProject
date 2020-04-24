@@ -13,6 +13,7 @@ public class GameStart : MonoSingleton<GameStart>
         AssetBundleManager.Instance.LoadAssetBundleConfig();
         ResourceManager.Instance.Init(this);
         ObjectManager.Instance.Init(transform.Find("RecyclePoolTrs"), transform.Find("SceneTrs"));
+        HotPatchManager.Instance.Init(this);
     }
     // Use this for initialization
     void Start ()

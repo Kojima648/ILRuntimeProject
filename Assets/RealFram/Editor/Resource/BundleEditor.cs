@@ -238,11 +238,11 @@ public class BundleEditor
             patch.Name = files[i].Name;
             patch.Size = files[i].Length / 1024.0f;
             patch.Platform = EditorUserBuildSettings.activeBuildTarget.ToString();
-            patch.Url = "" + PlayerSettings.bundleVersion + "/" + hotCount + "/" + files[i].Name;
+            patch.Url = "http://127.0.0.1/hotfix/" + PlayerSettings.bundleVersion + "/" + hotCount + "/" + files[i].Name;
             patches.Files.Add(patch);
         }
 
-        BinarySerializeOpt.Xmlserialize(m_hotFixPath + "Patch.xml", patches);
+        BinarySerializeOpt.Xmlserialize(m_hotFixPath + "/Patch.xml", patches);
 
     }
 

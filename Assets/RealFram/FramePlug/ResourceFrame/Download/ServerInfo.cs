@@ -19,7 +19,7 @@ public class VersionInfo
     //当前游戏的版本号
     [XmlAttribute] public string Version;
     //当前版本下的热更包（可能含多个）
-    [XmlElement] public Patches[] Patcheses;
+    [XmlElement] public Patches[] Patches;
 }
 
 /// <summary>
