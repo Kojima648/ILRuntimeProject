@@ -12,20 +12,27 @@ public class UIManager : Singleton<UIManager>
 {
     //UI节点
     public RectTransform m_UiRoot;
+
     //窗口节点
-    private RectTransform m_WndRoot;
+    public RectTransform m_WndRoot;
+
     //UI摄像机
     private Camera m_UICamera;
+
     //EventSystem节点
     private EventSystem m_EventSystem;
+
     //屏幕的宽高比
     private float m_CanvasRate = 0;
 
     private string m_UIPrefabPath = "Assets/GameData/Prefabs/UGUI/Panel/";
+
     //注册的字典
     private Dictionary<string, System.Type> m_RegisterDic = new Dictionary<string, System.Type>();
+
     //所有打开的窗口
     private Dictionary<string, Window> m_WindowDic = new Dictionary<string, Window>();
+
     //打开的窗口列表
     private List<Window> m_WindowList = new List<Window>();
 
@@ -74,6 +81,7 @@ public class UIManager : Singleton<UIManager>
         {
             m_EventSystem = EventSystem.current;
         }
+
         m_EventSystem.firstSelectedGameObject = obj;
     }
 
@@ -115,6 +123,7 @@ public class UIManager : Singleton<UIManager>
         {
             return wnd.OnMessage(msgID, paralist);
         }
+
         return false;
     }
 
@@ -129,7 +138,7 @@ public class UIManager : Singleton<UIManager>
         Window wnd = null;
         if (m_WindowDic.TryGetValue(name, out wnd))
         {
-            return (T)wnd;
+            return (T) wnd;
         }
 
         return null;
@@ -143,8 +152,9 @@ public class UIManager : Singleton<UIManager>
     /// <param name="para1"></param>
     /// <param name="para2"></param>
     /// <param name="para3"></param>
+    /// <param name="resources"></param>
     /// <returns></returns>
-    public Window PopUpWnd(string wndName, bool bTop = true, params object[] paralist)
+    public Window PopUpWnd(string wndName, bool bTop = true, bool resources = false, params object[] paralist)
     {
         Window wnd = FindWndByName<Window>(wndName);
         if (wnd == null)
@@ -160,7 +170,16 @@ public class UIManager : Singleton<UIManager>
                 return null;
             }
 
-            GameObject wndObj = ObjectManager.Instance.InstantiateObject(m_UIPrefabPath + wndName, false, false);
+            GameObject wndObj = null;
+            if (resources)
+            {
+                wndObj = GameObject.Instantiate(Resources.Load<GameObject>(wndName.Replace(".prefab", "")));
+            }
+            else
+            {
+                wndObj = ObjectManager.Instance.InstantiateObject(m_UIPrefabPath + wndName, false, false);
+            }
+
             if (wndObj == null)
             {
                 Debug.Log("创建窗口Prefab失败：" + wndName);
@@ -177,6 +196,7 @@ public class UIManager : Singleton<UIManager>
             wnd.Transform = wndObj.transform;
             wnd.Name = wndName;
             wnd.Awake(paralist);
+            wnd.Resource = resources;
             wndObj.transform.SetParent(m_WndRoot, false);
 
             if (bTop)
@@ -222,14 +242,22 @@ public class UIManager : Singleton<UIManager>
                 m_WindowList.Remove(window);
             }
 
-            if (destory)
+            if (!window.Resource)
             {
-                ObjectManager.Instance.ReleaseObject(window.GameObject, 0, true);
+                if (destory)
+                {
+                    ObjectManager.Instance.ReleaseObject(window.GameObject, 0, true);
+                }
+                else
+                {
+                    ObjectManager.Instance.ReleaseObject(window.GameObject, recycleParent: false);
+                }
             }
             else
             {
-                ObjectManager.Instance.ReleaseObject(window.GameObject, recycleParent: false);
+                GameObject.Destroy(window.GameObject);
             }
+
             window.GameObject = null;
             window = null;
         }
@@ -249,10 +277,10 @@ public class UIManager : Singleton<UIManager>
     /// <summary>
     /// 切换到唯一窗口
     /// </summary>
-    public void SwitchStateByName(string name,bool bTop = true,params object[] paralist)
+    public void SwitchStateByName(string name, bool bTop = true, bool resource = false, params object[] paralist)
     {
         CloseAllWnd();
-        PopUpWnd(name, bTop, paralist);
+        PopUpWnd(name, bTop, resource, paralist);
     }
 
     /// <summary>
@@ -269,7 +297,6 @@ public class UIManager : Singleton<UIManager>
     /// 根据窗口对象隐藏窗口
     /// </summary>
     /// <param name="wnd"></param>
-
     public void HideWnd(Window wnd)
     {
         if (wnd != null)

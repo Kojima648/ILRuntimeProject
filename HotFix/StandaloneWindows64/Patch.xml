@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Patches xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1">
-  <Files Name="attack" Url="http://127.0.0.1/hotfix/0.1/1/attack" Platform="StandaloneWindows64" MD5="ef2cfc17052b79997691272f1e4d7e8f" Size="653.823242" />
-  <Files Name="StandaloneWindows64" Url="http://127.0.0.1/hotfix/0.1/1/StandaloneWindows64" Platform="StandaloneWindows64" MD5="ac96828e30860673fea5ed23f5ecb420" Size="1.83007813" />
+  <Files Name="attack" Url="http://127.0.0.1/hotfix/0.1/1/attack" Platform="StandaloneWindows64" MD5="a0602dc6fc31ca05454a7406b03ab230" Size="656.615234" />
+  <Files Name="StandaloneWindows64" Url="http://127.0.0.1/hotfix/0.1/1/StandaloneWindows64" Platform="StandaloneWindows64" MD5="417c79e93f26d164de7af1cbac7926cd" Size="1.87207031" />
 </Patches>

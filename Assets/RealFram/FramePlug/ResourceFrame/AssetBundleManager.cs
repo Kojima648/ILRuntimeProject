@@ -7,20 +7,22 @@ using UnityEngine;
 public class AssetBundleManager : Singleton<AssetBundleManager>
 {
     protected string m_ABConfigABName = "assetbundleconfig";
+
     //资源关系依赖配表，可以根据crc来找到对应资源块
     protected Dictionary<uint, ResouceItem> m_ResouceItemDic = new Dictionary<uint, ResouceItem>();
+
     //储存已加载的AB包，key为crc
     protected Dictionary<uint, AssetBundleItem> m_AssetBundleItemDic = new Dictionary<uint, AssetBundleItem>();
+
     //AssetBundleItem类对象池
-    protected ClassObjectPool<AssetBundleItem> m_AssetBundleItemPool = ObjectManager.Instance.GetOrCreatClassPool<AssetBundleItem>(500);
+    protected ClassObjectPool<AssetBundleItem> m_AssetBundleItemPool =
+        ObjectManager.Instance.GetOrCreatClassPool<AssetBundleItem>(500);
 
     protected string ABLoadPath
     {
-        get
-        {
-            return Application.streamingAssetsPath + "/";
-        }
+        get { return Application.streamingAssetsPath + "/"; }
     }
+
     /// <summary>
     /// 加载ab配置表
     /// </summary>
@@ -34,6 +36,9 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
 
         m_ResouceItemDic.Clear();
         string configPath = ABLoadPath + m_ABConfigABName;
+        string hotABPath = HotPatchManager.Instance.ComputeABPath(m_ABConfigABName);
+        configPath = string.IsNullOrEmpty(hotABPath) ? configPath : hotABPath;
+        
         AssetBundle configAB = AssetBundle.LoadFromFile(configPath);
         TextAsset textAsset = configAB.LoadAsset<TextAsset>(m_ABConfigABName);
         if (textAsset == null)
@@ -44,7 +49,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
 
         MemoryStream stream = new MemoryStream(textAsset.bytes);
         BinaryFormatter bf = new BinaryFormatter();
-        AssetBundleConfig config = (AssetBundleConfig)bf.Deserialize(stream);
+        AssetBundleConfig config = (AssetBundleConfig) bf.Deserialize(stream);
         stream.Close();
 
         for (int i = 0; i < config.ABList.Count; i++)
@@ -64,6 +69,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
                 m_ResouceItemDic.Add(item.m_Crc, item);
             }
         }
+
         return true;
     }
 
@@ -78,7 +84,8 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
 
         if (!m_ResouceItemDic.TryGetValue(crc, out item) || item == null)
         {
-            Debug.LogError(string.Format("LoadResourceAssetBundle error: can not find crc {0} in AssetBundleConfig", crc.ToString()));
+            Debug.LogError(string.Format("LoadResourceAssetBundle error: can not find crc {0} in AssetBundleConfig",
+                crc.ToString()));
             return item;
         }
 
@@ -113,7 +120,10 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
         if (!m_AssetBundleItemDic.TryGetValue(crc, out item))
         {
             AssetBundle assetBundle = null;
-            string fullPath = ABLoadPath + name;
+
+            string hotABPath = HotPatchManager.Instance.ComputeABPath(name);
+            //如果有热更的，走热更，没有就走本地
+            string fullPath = string.IsNullOrEmpty(hotABPath) ? ABLoadPath + name : hotABPath;
             assetBundle = AssetBundle.LoadFromFile(fullPath);
 
             if (assetBundle == null)
@@ -130,6 +140,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
         {
             item.RefCount++;
         }
+
         return item.assetBundle;
     }
 
@@ -151,6 +162,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
                 UnLoadAssetBundle(item.m_DependAssetBundle[i]);
             }
         }
+
         UnLoadAssetBundle(item.m_ABName);
     }
 
@@ -200,25 +212,35 @@ public class ResouceItem
 {
     //资源路径的CRC
     public uint m_Crc = 0;
+
     //该资源的文件名
     public string m_AssetName = string.Empty;
+
     //该资源所在的AssetBundle
     public string m_ABName = string.Empty;
+
     //该资源所依赖的AssetBundle
     public List<string> m_DependAssetBundle = null;
+
     //该资源加载完的AB包
     public AssetBundle m_AssetBundle = null;
+
     //-----------------------------------------------------
     //资源对象
     public Object m_Obj = null;
+
     //资源唯一标识
     public int m_Guid = 0;
+
     //资源最后所使用的时间
     public float m_LastUseTime = 0.0f;
+
     //引用计数
     protected int m_RefCount = 0;
+
     //是否跳场景清掉
     public bool m_Clear = true;
+
     public int RefCount
     {
         get { return m_RefCount; }

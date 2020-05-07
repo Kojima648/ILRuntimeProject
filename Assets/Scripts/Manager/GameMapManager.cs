@@ -6,11 +6,12 @@ using System;
 
 public class GameMapManager : Singleton<GameMapManager>
 {
-
     //加载场景完成回调
     public Action LoadSceneOverCallBack;
+
     //加载场景开始回调
     public Action LoadSceneEnterCallBack;
+
     //当前场景名
     public string CurrentMapName { get; set; }
 
@@ -39,7 +40,7 @@ public class GameMapManager : Singleton<GameMapManager>
     {
         LoadingProgress = 0;
         m_Mono.StartCoroutine(LoadSceneAsync(name));
-        UIManager.Instance.PopUpWnd(ConStr.LOADINGPANEL, true, name);
+        UIManager.Instance.PopUpWnd(ConStr.LOADINGPANEL, true, false, name);
     }
 
     /// <summary>
@@ -57,9 +58,10 @@ public class GameMapManager : Singleton<GameMapManager>
         {
             LoadSceneEnterCallBack();
         }
+
         ClearCache();
         AlreadyLoadScene = false;
-        AsyncOperation unLoadScene =  SceneManager.LoadSceneAsync(ConStr.EMPTYSCENE, LoadSceneMode.Single);
+        AsyncOperation unLoadScene = SceneManager.LoadSceneAsync(ConStr.EMPTYSCENE, LoadSceneMode.Single);
         while (unLoadScene != null && !unLoadScene.isDone)
         {
             yield return new WaitForEndOfFrame();
@@ -73,7 +75,7 @@ public class GameMapManager : Singleton<GameMapManager>
             asyncScene.allowSceneActivation = false;
             while (asyncScene.progress < 0.9f)
             {
-                targetProgress = (int)asyncScene.progress * 100;
+                targetProgress = (int) asyncScene.progress * 100;
                 yield return new WaitForEndOfFrame();
                 //平滑过渡
                 while (LoadingProgress < targetProgress)
@@ -92,6 +94,7 @@ public class GameMapManager : Singleton<GameMapManager>
                 ++LoadingProgress;
                 yield return new WaitForEndOfFrame();
             }
+
             LoadingProgress = 100;
             asyncScene.allowSceneActivation = true;
             AlreadyLoadScene = true;

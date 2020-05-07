@@ -13,6 +13,8 @@ public class Window
 
     //名字
     public string Name { get; set; }
+    //是否从resources加载
+    public bool Resource { get; set; } = false;
 
     //所有的Button
     protected List<Button> m_AllButton = new List<Button>();
@@ -25,13 +27,21 @@ public class Window
         return true;
     }
 
-    public virtual void Awake(params object[] paralist) { }
+    public virtual void Awake(params object[] paralist)
+    {
+    }
 
-    public virtual void OnShow(params object[] paralist) { }
+    public virtual void OnShow(params object[] paralist)
+    {
+    }
 
-    public virtual void OnDisable() { }
+    public virtual void OnDisable()
+    {
+    }
 
-    public virtual void OnUpdate() { }
+    public virtual void OnUpdate()
+    {
+    }
 
     public virtual void OnClose()
     {
@@ -48,7 +58,7 @@ public class Window
     /// <param name="image"></param>
     /// <param name="setNativeSize"></param>
     /// <returns></returns>
-    public bool ChangeImageSprite(string path, Image image,bool setNativeSize = false)
+    public bool ChangeImageSprite(string path, Image image, bool setNativeSize = false)
     {
         if (image == null)
             return false;
@@ -64,6 +74,7 @@ public class Window
             {
                 image.SetNativeSize();
             }
+
             return true;
         }
 
@@ -81,7 +92,8 @@ public class Window
         if (image == null)
             return;
 
-        ResourceManager.Instance.AsyncLoadResource(path, OnLoadSpriteFinish, LoadResPriority.RES_MIDDLE, true, image, setNativeSize);
+        ResourceManager.Instance.AsyncLoadResource(path, OnLoadSpriteFinish, LoadResPriority.RES_MIDDLE, true, image,
+            setNativeSize);
     }
 
     /// <summary>
@@ -98,7 +110,7 @@ public class Window
         {
             Sprite sp = obj as Sprite;
             Image image = param1 as Image;
-            bool setNativeSize = (bool)param2;
+            bool setNativeSize = (bool) param2;
             if (image.sprite != null)
                 image.sprite = null;
 
@@ -137,7 +149,7 @@ public class Window
     /// </summary>
     /// <param name="btn"></param>
     /// <param name="action"></param>
-    public void AddButtonClickListener(Button btn, UnityEngine.Events.UnityAction action) 
+    public void AddButtonClickListener(Button btn, UnityEngine.Events.UnityAction action)
     {
         if (btn != null)
         {
@@ -145,6 +157,7 @@ public class Window
             {
                 m_AllButton.Add(btn);
             }
+
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(action);
             btn.onClick.AddListener(BtnPlaySound);
@@ -156,7 +169,7 @@ public class Window
     /// </summary>
     /// <param name="toggle"></param>
     /// <param name="action"></param>
-    public void AddToggleClickListener(Toggle toggle , UnityEngine.Events.UnityAction<bool> action)
+    public void AddToggleClickListener(Toggle toggle, UnityEngine.Events.UnityAction<bool> action)
     {
         if (toggle != null)
         {
@@ -164,6 +177,7 @@ public class Window
             {
                 m_AllToggle.Add(toggle);
             }
+
             toggle.onValueChanged.RemoveAllListeners();
             toggle.onValueChanged.AddListener(action);
             toggle.onValueChanged.AddListener(TogglePlaySound);
@@ -175,7 +189,6 @@ public class Window
     /// </summary>
     void BtnPlaySound()
     {
-
     }
 
     /// <summary>
@@ -184,6 +197,5 @@ public class Window
     /// <param name="isOn"></param>
     void TogglePlaySound(bool isOn)
     {
-
     }
 }
