@@ -6,7 +6,7 @@ using System.IO;
 
 public class TestEditor
 {
-    [MenuItem("TTT/TTTT")]
+    [MenuItem("Tools/文件写入测试")]
     public static void JenkinsTest()
     {
         FileInfo fileInfo = new FileInfo(Application.dataPath + "/测试.txt");

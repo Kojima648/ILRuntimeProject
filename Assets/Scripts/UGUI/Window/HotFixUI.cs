@@ -5,11 +5,11 @@ using UnityEngine;
 public class HotFixUI : Window
 {
     private HotFixPanel m_Panel;
-    private float m_SubTime = 0;
+    private float m_SumTime = 0;
 
     public override void Awake(params object[] paralist)
     {
-        m_SubTime = 0;
+        m_SumTime = 0;
         //持有面板
         m_Panel = GameObject.GetComponent<HotFixPanel>();
         //进度设置为0
@@ -20,8 +20,24 @@ public class HotFixUI : Window
         //回调
         HotPatchManager.Instance.ServerInfoError += ServerInfoError;
         HotPatchManager.Instance.ItemError += ItemError;
-        //热更
-        HotFix();
+#if UNITY_EDITOR
+        StartOnFinish();
+#else
+        if (HotPatchManager.Instance.ComputeUnPackFile())
+        {
+            m_Panel.m_SliderTopText.text = "解压中...";
+
+            HotPatchManager.Instance.StartUnPackFile(() =>
+            {
+                m_SumTime = 0;
+                HotFix();
+            });
+        }
+        else
+        {
+            HotFix();
+        }
+#endif
     }
 
     private void HotFix()
@@ -99,12 +115,20 @@ public class HotFixUI : Window
 
     public override void OnUpdate()
     {
+        if (HotPatchManager.Instance.StartUnPack)
+        {
+            m_SumTime += Time.deltaTime;
+            m_Panel.m_Image.fillAmount = HotPatchManager.Instance.GetUnPackProgress();
+            float speed = (HotPatchManager.Instance.AlreadyUnPackSize / 1024.0f) / m_SumTime;
+            m_Panel.m_Text.text = string.Format("{0:F} M/S", speed);
+        }
+
         //如果正在下载，计算速度
         if (HotPatchManager.Instance.StartDownload)
         {
-            m_SubTime += Time.deltaTime;
+            m_SumTime += Time.deltaTime;
             m_Panel.m_Image.fillAmount = HotPatchManager.Instance.GetProgress();
-            float speed = (HotPatchManager.Instance.GetLoadSize() / 1024.0f) / m_SubTime;
+            float speed = (HotPatchManager.Instance.GetLoadSize() / 1024.0f) / m_SumTime;
             m_Panel.m_Text.text = string.Format("{0:F} M/S", speed);
         }
     }
@@ -127,7 +151,6 @@ public class HotFixUI : Window
         });
     }
 
-    
 
     /// <summary>
     /// 重新下载逻辑
@@ -150,7 +173,7 @@ public class HotFixUI : Window
     {
         GameStart.OpenCommonConfirm("服务器列表获取失败", "服务器内容获取失败，请检查网络连接是否正常，尝试重新下载？", CheckVersion, Application.Quit);
     }
-    
+
     /// <summary>
     /// 下载错误列表
     /// </summary>

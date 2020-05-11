@@ -20,7 +20,14 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
 
     protected string ABLoadPath
     {
-        get { return Application.streamingAssetsPath + "/"; }
+        get
+        {
+#if UNITY_ANDROID
+            return Application.persistentDataPath + "/Origin/";
+#else
+            return Application.streamingAssetsPath + "/";
+#endif
+        }
     }
 
     /// <summary>
@@ -38,8 +45,8 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
         string configPath = ABLoadPath + m_ABConfigABName;
         string hotABPath = HotPatchManager.Instance.ComputeABPath(m_ABConfigABName);
         configPath = string.IsNullOrEmpty(hotABPath) ? configPath : hotABPath;
-        
-        AssetBundle configAB = AssetBundle.LoadFromFile(configPath);
+        byte[] bytes = AES.AESFileByteDecrypt(configPath, "Ocean");
+        AssetBundle configAB = AssetBundle.LoadFromMemory(bytes);
         TextAsset textAsset = configAB.LoadAsset<TextAsset>(m_ABConfigABName);
         if (textAsset == null)
         {
@@ -124,7 +131,8 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
             string hotABPath = HotPatchManager.Instance.ComputeABPath(name);
             //如果有热更的，走热更，没有就走本地
             string fullPath = string.IsNullOrEmpty(hotABPath) ? ABLoadPath + name : hotABPath;
-            assetBundle = AssetBundle.LoadFromFile(fullPath);
+            byte[] bytes = AES.AESFileByteDecrypt(fullPath, "Ocean");
+            assetBundle = AssetBundle.LoadFromMemory(bytes);
 
             if (assetBundle == null)
             {
