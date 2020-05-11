@@ -6,6 +6,9 @@
   <ABList Path="Assets/GameData/Data/Binary/BuffData.bytes" Crc="697814829" ABName="bytes" AssetName="BuffData.bytes" />
   <ABList Path="Assets/GameData/Data/Binary/MonsterData.bytes" Crc="1289056854" ABName="bytes" AssetName="MonsterData.bytes" />
   <ABList Path="Assets/GameData/Prefabs/UGUI/Item/CommonConfirm.prefab" Crc="85461140" ABName="commonconfirm" AssetName="CommonConfirm.prefab" />
+  <ABList Path="Assets/GameData/Data/HotFix/HotFix_Project.dll.mdb" Crc="2657602696" ABName="hotfix" AssetName="HotFix_Project.dll.mdb" />
+  <ABList Path="Assets/GameData/Data/HotFix/HotFix_Project.dll.txt" Crc="2670967931" ABName="hotfix" AssetName="HotFix_Project.dll.txt" />
+  <ABList Path="Assets/GameData/Data/HotFix/HotFix_Project.pdb.txt" Crc="1606498474" ABName="hotfix" AssetName="HotFix_Project.pdb.txt" />
   <ABList Path="Assets/GameData/Prefabs/UGUI/Panel/LoadingPanel.prefab" Crc="968375833" ABName="loadingpanel" AssetName="LoadingPanel.prefab" />
   <ABList Path="Assets/GameData/Prefabs/UGUI/Panel/MenuPanel.prefab" Crc="2681775694" ABName="menupanel" AssetName="MenuPanel.prefab" />
   <ABList Path="Assets/GameData/Prefabs/Effect/ParticleTest1.prefab" Crc="2774616854" ABName="particletest1" AssetName="ParticleTest1.prefab" />
