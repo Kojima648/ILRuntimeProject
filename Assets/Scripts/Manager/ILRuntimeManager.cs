@@ -159,7 +159,7 @@ public delegate void TestDelegateMeth(int a);
 
 public delegate string TestDelegateFunction(string a);
 
-public class CLRBingdingTestClass
+public class CLRBindingTestClass
 {
     public static float DoSomeTest(int a, float b)
     {
@@ -167,65 +167,106 @@ public class CLRBingdingTestClass
     }
 }
 
+/// <summary>
+/// 携程适配器
+/// </summary>
 public class CoroutineAdapter : CrossBindingAdaptor
 {
-    public override System.Type BaseCLRType
-    {
-        get { return null; }
-    }
+    public override Type BaseCLRType => null;
 
-    public override System.Type AdaptorType
+    public override Type AdaptorType
     {
         get { return typeof(Adaptor); }
     }
 
-    public override System.Type[] BaseCLRTypes
+    public override Type[] BaseCLRTypes
     {
-        get { return new System.Type[] {typeof(IEnumerator<object>), typeof(IEnumerator), typeof(System.IDisposable)}; }
+        get
+        {
+            return new Type[]{typeof(IEnumerator<object>),typeof(IEnumerator),typeof(IDisposable)};
+        }
     }
 
-    public override object CreateCLRInstance(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+    public override object CreateCLRInstance(AppDomain appdomain, ILTypeInstance instance)
     {
         return new Adaptor(appdomain, instance);
     }
 
-    public class Adaptor : IEnumerator<System.Object>, IEnumerator, System.IDisposable, CrossBindingAdaptorType
+    internal class Adaptor : IEnumerator<System.Object>, IEnumerator, IDisposable, CrossBindingAdaptorType
     {
-        private ILTypeInstance m_Instance;
-        private ILRuntime.Runtime.Enviorment.AppDomain m_Appdamain;
-        private IMethod m_CurMethod;
-        private IMethod m_DisposeMethod;
-        private IMethod m_MoveNextMethod;
-        private IMethod m_ResetMethod;
-        private IMethod m_ToString;
+        private ILTypeInstance instance;
+        private AppDomain appdomain;
 
         public Adaptor()
         {
         }
 
-        public Adaptor(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+        public Adaptor(AppDomain appDomain, ILTypeInstance instance)
         {
-            m_Instance = instance;
-            m_Appdamain = appdomain;
+            this.instance = instance;
+            this.appdomain = appDomain;
         }
 
+        private IMethod mMoveNextMethod;
+        private bool mMoveNextMethodGot;
+
+        public bool MoveNext()
+        {
+            if (!mMoveNextMethodGot)
+            {
+                mMoveNextMethod = instance.Type.GetMethod("MoveNext", 0);
+                mMoveNextMethodGot = true;
+            }
+
+            if (mMoveNextMethod != null)
+            {
+                return (bool) appdomain.Invoke(mMoveNextMethod, instance, null);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private IMethod mResetMethod;
+        private bool mResetMethodGot;
+
+        public void Reset()
+        {
+            if (!mResetMethodGot)
+            {
+                mResetMethod = instance.Type.GetMethod("Reset", 0);
+                mResetMethodGot = true;
+            }
+
+            if (mResetMethod != null)
+            {
+                appdomain.Invoke(mResetMethod, instance, null);
+            }
+        }
+
+        private IMethod mCurrentMethod;
+        private bool mCurrentMethodGot;
+        object IEnumerator.Current => Current;
 
         public object Current
         {
             get
             {
-                if (m_CurMethod == null)
+                if (!mCurrentMethodGot)
                 {
-                    m_CurMethod = m_Instance.Type.GetMethod("get_Current", 0);
-                    if (m_CurMethod == null)
+                    mCurrentMethod = instance.Type.GetMethod("get_Current", 0);
+                    if (mCurrentMethod == null)
                     {
-                        m_CurMethod = m_Instance.Type.GetMethod("System.Collections.IEnumerator.get_Current", 0);
+                        mCurrentMethod = instance.Type.GetMethod("System.Collections.IEnumerator.get_Current", 0);
                     }
+
+                    mCurrentMethodGot = true;
                 }
 
-                if (m_CurMethod != null)
+                if (mCurrentMethod != null)
                 {
-                    var res = m_Appdamain.Invoke(m_CurMethod, m_Instance, null);
+                    var res = appdomain.Invoke(mCurrentMethod, instance, null);
                     return res;
                 }
                 else
@@ -235,78 +276,49 @@ public class CoroutineAdapter : CrossBindingAdaptor
             }
         }
 
-        public ILTypeInstance ILInstance
-        {
-            get { return m_Instance; }
-        }
+        private IMethod mDisposeMethod;
+        private bool mDisposeMethodGot;
 
         public void Dispose()
         {
-            if (m_DisposeMethod == null)
+            if (!mDisposeMethodGot)
             {
-                m_DisposeMethod = m_Instance.Type.GetMethod("Dispose", 0);
-                if (m_DisposeMethod == null)
+                mDisposeMethod = instance.Type.GetMethod("Dispose", 0);
+                if (mDisposeMethod == null)
                 {
-                    m_DisposeMethod = m_Instance.Type.GetMethod("System.IDisposable.Dispose", 0);
+                    mDisposeMethod = instance.Type.GetMethod("System.IDisposable.Dispose", 0);
                 }
+
+                mDisposeMethodGot = true;
             }
 
-            if (m_DisposeMethod != null)
+            if (mDisposeMethod != null)
             {
-                m_Appdamain.Invoke(m_DisposeMethod, m_Instance, null);
-            }
-        }
-
-        public bool MoveNext()
-        {
-            if (m_MoveNextMethod == null)
-            {
-                m_MoveNextMethod = m_Instance.Type.GetMethod("MoveNext", 0);
-            }
-
-            if (m_MoveNextMethod != null)
-            {
-                return (bool) m_Appdamain.Invoke(m_MoveNextMethod, m_Instance, null);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void Reset()
-        {
-            if (m_ResetMethod == null)
-            {
-                m_ResetMethod = m_Instance.Type.GetMethod("Reset", 0);
-            }
-
-            if (m_ResetMethod != null)
-            {
-                m_Appdamain.Invoke(m_ResetMethod, m_Instance, null);
+                appdomain.Invoke(mDisposeMethod, instance, null);
             }
         }
 
         public override string ToString()
         {
-            if (m_ToString == null)
-            {
-                m_ToString = m_Appdamain.ObjectType.GetMethod("ToString", 0);
-            }
-
-            IMethod m = m_Instance.Type.GetVirtualMethod(m_ToString);
+            IMethod m = appdomain.ObjectType.GetMethod("ToString", 0);
+            m = instance.Type.GetVirtualMethod(m);
             if (m == null || m is ILMethod)
             {
-                return m_Instance.ToString();
+                return instance.ToString();
             }
             else
             {
-                return m_Instance.Type.FullName;
+                return instance.Type.FullName;
             }
         }
+
+        public ILTypeInstance ILInstance => instance;
     }
 }
 
+/// <summary>
+/// MonoBehaviour适配器
+/// </summary>
 public class MonoBehaviourAdapter : CrossBindingAdaptor
 {
     public override System.Type BaseCLRType
@@ -438,20 +450,20 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
     System.IO.MemoryStream fs;
     System.IO.MemoryStream p;
 
-    public ILRuntime.Runtime.Enviorment.AppDomain ILRunAppDomain
+    public AppDomain ILRunAppDomain
     {
         get { return m_AppDomain; }
     }
 
     public void Init()
     {
-       GameStart.Instance.StartCoroutine( LoadHotFixAssembly());
+        GameStart.Instance.StartCoroutine(LoadHotFixAssembly());
     }
 
     IEnumerator LoadHotFixAssembly()
     {
         m_AppDomain = new AppDomain();
-        WWW www = new WWW("file:///"+DLLPATH);
+        WWW www = new WWW("file:///" + DLLPATH);
         while (!www.isDone)
             yield return null;
         if (!string.IsNullOrEmpty(www.error))
@@ -459,7 +471,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         byte[] dll = www.bytes;
         www.Dispose();
         fs = new MemoryStream(dll);
-        
+
         m_AppDomain.LoadAssembly(fs, null, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
 
         InitializeIlRuntime();
@@ -519,7 +531,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         SetUpCLRGetCompontent();
 
         //绑定注册 (最后执行)
-        //ILRuntime.Runtime. Generated.CLRBindings.Initialize(m_AppDomain);
+        ILRuntime.Runtime.Generated.CLRBindings.Initialize(m_AppDomain);
     }
 
     void OnHotFixLoaded()
@@ -591,26 +603,27 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         //-----------------------------------------------------------------------------------------------------------------
 
         //跨域继承
-        //TestClassBase obj = m_AppDomain.Instantiate<TestClassBase>("HotFix.TestInheritance");
-        //obj.TestAbstract(556);
-        //obj.TestVirtual("Ocean");
+/*        TestClassBase obj = m_AppDomain.Instantiate<TestClassBase>("HotFix_Project.TestInheritance");
+        obj.TestAbstract(556);
+        obj.TestVirtual("Ocean");*/
 
-        //TestClassBase obj = m_AppDomain.Invoke("HotFix.TestInheritance", "NewObject", null, null) as TestClassBase;
-        //obj.TestAbstract(721);
-        //obj.TestVirtual("Ocean123");
+        /*TestClassBase obj = m_AppDomain.Invoke("HotFix_Project.TestInheritance", "NewObject", null, null) as TestClassBase;
+        obj.TestAbstract(721);
+        obj.TestVirtual("Ocean123");*/
 
         //-----------------------------------------------------------------------------------------------------------------
 
         //CLR绑定测试
-        //long curTime = System.DateTime.Now.Ticks;
-        //m_AppDomain.Invoke("HotFix.TestCLRBinding", "RunTest", null, null);
-        //Debug.Log("使用时间：" + (System.DateTime.Now.Ticks - curTime));
-        //5136253
+        /*long curTime = System.DateTime.Now.Ticks;
+        m_AppDomain.Invoke("HotFix_Project.TestCLRBinding", "RunTest", null, null);
+        Debug.Log("使用时间：" + (System.DateTime.Now.Ticks - curTime));*/
+        //使用时间：1226705
+        //使用时间：917777
 
         //-----------------------------------------------------------------------------------------------------------------
 
         //协程测试
-        //m_AppDomain.Invoke("HotFix.TestCor", "RunTest", null, null);
+        m_AppDomain.Invoke("HotFix_Project.TestCoroutine", "RunTest", null, null);
 
 
         //-----------------------------------------------------------------------------------------------------------------
