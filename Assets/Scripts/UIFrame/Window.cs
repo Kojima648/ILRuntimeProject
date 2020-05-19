@@ -13,8 +13,13 @@ public class Window
 
     //名字
     public string Name { get; set; }
+
     //是否从resources加载
     public bool Resource { get; set; } = false;
+    //是否热更
+    public bool IsHotFix { get; set; } = false;
+    //热更类名 
+    public string HotFixClassName { get; set; }
 
     //所有的Button
     protected List<Button> m_AllButton = new List<Button>();
@@ -27,11 +32,11 @@ public class Window
         return true;
     }
 
-    public virtual void Awake(params object[] paralist)
+    public virtual void Awake(object param1 = null,object param2 = null,object param3 = null)
     {
     }
 
-    public virtual void OnShow(params object[] paralist)
+    public virtual void OnShow(object param1 = null,object param2 = null,object param3 = null)
     {
     }
 

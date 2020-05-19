@@ -446,10 +446,11 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
 
     private const string DLLPATH = "Assets/GameData/Data/HotFix/HotFix_Project.dll.bytes";
     private const string PDBPATH = "Assets/GameData/Data/HotFix/HotFix_Project.pdb.bytes";
-    AppDomain m_AppDomain;
+    private AppDomain m_AppDomain;
+    
     System.IO.MemoryStream fs;
     System.IO.MemoryStream p;
-
+//属性器ui
     public AppDomain ILRunAppDomain
     {
         get { return m_AppDomain; }
@@ -471,9 +472,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         byte[] dll = www.bytes;
         www.Dispose();
         fs = new MemoryStream(dll);
-
         m_AppDomain.LoadAssembly(fs, null, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
-
         InitializeIlRuntime();
         OnHotFixLoaded();
     }
@@ -623,7 +622,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         //-----------------------------------------------------------------------------------------------------------------
 
         //协程测试
-        m_AppDomain.Invoke("HotFix_Project.TestCoroutine", "RunTest", null, null);
+//        m_AppDomain.Invoke("HotFix_Project.TestCoroutine", "RunTest", null, null);
 
 
         //-----------------------------------------------------------------------------------------------------------------
