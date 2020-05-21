@@ -27,7 +27,7 @@ public class HotFixUI : Window
         {
             m_Panel.m_SliderTopText.text = "解压中...";
 
-            HotPatchManager.Instance.StartUnPackFile(() =>
+            HotPatchManager.Instance.StartUnackFile (() =>
             {
                 m_SumTime = 0;
                 HotFix();
@@ -91,7 +91,7 @@ public class HotFixUI : Window
         m_Panel.m_InfoPanel.SetActive(true);
         m_Panel.m_hotContentText.text = HotPatchManager.Instance.CurrentPatches.Des;
 
-        GameStart.Instance.StartCoroutine(HotPatchManager.Instance.StartDownloadAB(StartOnFinish));
+        GameStart.Instance.StartCoroutine(HotPatchManager.Instance.StartDownLoadAB(StartOnFinish));
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class HotFixUI : Window
         if (HotPatchManager.Instance.StartUnPack)
         {
             m_SumTime += Time.deltaTime;
-            m_Panel.m_Image.fillAmount = HotPatchManager.Instance.GetUnPackProgress();
+            m_Panel.m_Image.fillAmount = HotPatchManager.Instance.GetUnpackProgress();
             float speed = (HotPatchManager.Instance.AlreadyUnPackSize / 1024.0f) / m_SumTime;
             m_Panel.m_Text.text = string.Format("{0:F} M/S", speed);
         }

@@ -181,10 +181,7 @@ public class CoroutineAdapter : CrossBindingAdaptor
 
     public override Type[] BaseCLRTypes
     {
-        get
-        {
-            return new Type[]{typeof(IEnumerator<object>),typeof(IEnumerator),typeof(IDisposable)};
-        }
+        get { return new Type[] {typeof(IEnumerator<object>), typeof(IEnumerator), typeof(IDisposable)}; }
     }
 
     public override object CreateCLRInstance(AppDomain appdomain, ILTypeInstance instance)
@@ -447,9 +444,11 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
     private const string DLLPATH = "Assets/GameData/Data/HotFix/HotFix_Project.dll.bytes";
     private const string PDBPATH = "Assets/GameData/Data/HotFix/HotFix_Project.pdb.bytes";
     private AppDomain m_AppDomain;
-    
+
     System.IO.MemoryStream fs;
+
     System.IO.MemoryStream p;
+
 //属性器ui
     public AppDomain ILRunAppDomain
     {
@@ -458,7 +457,8 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
 
     public void Init()
     {
-        GameStart.Instance.StartCoroutine(LoadHotFixAssembly());
+//        GameStart.Instance.StartCoroutine(LoadHotFixAssembly());
+        LoadHotFixDll();
     }
 
     IEnumerator LoadHotFixAssembly()
@@ -477,6 +477,18 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         OnHotFixLoaded();
     }
 
+    void LoadHotFixDll()
+    {
+        //整个工程只有一个ILRuntime的AppDomain
+        m_AppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+        //读取热更资源的dll
+        TextAsset dllText = ResourceManager.Instance.LoadResource<TextAsset>(DLLPATH);
+        MemoryStream ms = new MemoryStream(dllText.bytes);
+        m_AppDomain.LoadAssembly(ms, null, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
+        InitializeIlRuntime();
+        OnHotFixLoaded();
+    }
+
     void InitializeIlRuntime()
     {
         //默认委托注册仅仅支持系统自带的Action以及Function
@@ -484,6 +496,9 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         m_AppDomain.DelegateManager.RegisterFunctionDelegate<int, string>();
         m_AppDomain.DelegateManager.RegisterMethodDelegate<int>();
         m_AppDomain.DelegateManager.RegisterMethodDelegate<string>();
+        m_AppDomain.DelegateManager
+            .RegisterMethodDelegate<System.String, UnityEngine.Object, System.Object, System.Object, System.Object>();
+
         m_AppDomain.DelegateManager
             .RegisterMethodDelegate<System.String, UnityEngine.Object, System.Object, System.Object>();
 
@@ -517,6 +532,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
             });
         });
 
+
         //跨域继承的注册
         m_AppDomain.RegisterCrossBindingAdaptor(new InheritanceAdapter());
         //注册协程适配器
@@ -524,7 +540,7 @@ public class ILRuntimeManager : Singleton<ILRuntimeManager>
         //注册Mono适配器
         m_AppDomain.RegisterCrossBindingAdaptor(new MonoBehaviourAdapter());
         //注册Window适配器
-        //m_AppDomain.RegisterCrossBindingAdaptor(new WindowAdapter());
+        m_AppDomain.RegisterCrossBindingAdaptor(new WindowAdapter());
 
         SetupCLRAddCompontent();
         SetUpCLRGetCompontent();

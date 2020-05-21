@@ -1,1 +1,1 @@
-﻿Version|0.1;PackageName|com.Company.ProductName;
+﻿Version|0.1;PackageName|com.TTT.RealName;ctName;

@@ -99,7 +99,7 @@ public delegate void OnAsyncFinsih(string path, ResouceObj resObj, object param1
 public class ResourceManager : Singleton<ResourceManager>
 {
     protected long m_Guid = 0;
-    public bool m_LoadFormAssetBundle = false;
+    public bool m_LoadFormAssetBundle = true;
     //缓存使用的资源列表
     public Dictionary<uint, ResouceItem> AssetDic { get; set; } = new Dictionary<uint, ResouceItem>();
     //缓存引用计数为零的资源列表，达到缓存最大的时候释放这个列表里面最早没用的资源

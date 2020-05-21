@@ -33,14 +33,14 @@ public class GameStart : MonoSingleton<GameStart>
     {
         image.fillAmount = 0f;
         yield return null;
-        text.text = "加载dll...";
-        ILRuntimeManager.Instance.Init();
-        
-        image.fillAmount = 0.1f;
-        yield return null;
         text.text = "加载本地数据...";
         AssetBundleManager.Instance.LoadAssetBundleConfig();
-        
+
+        image.fillAmount = 0.1f;
+        yield return null;
+        text.text = "加载dll...";
+        ILRuntimeManager.Instance.Init();
+
         image.fillAmount = 0.2f;
         yield return null;
         text.text = "加载数据表...";
@@ -49,7 +49,6 @@ public class GameStart : MonoSingleton<GameStart>
         image.fillAmount = 0.6f;
         yield return null;
         text.text = "加载配置文件...";
-        
 
         image.fillAmount = 0.9f;
         yield return null;
@@ -63,8 +62,8 @@ public class GameStart : MonoSingleton<GameStart>
     //注册UI窗口
     void RegisterUI()
     {
-       UIManager.Instance.Register<Window>(ConStr.MENUPANEL);
-       UIManager.Instance.Register<Window>(ConStr.LOADINGPANEL);
+        UIManager.Instance.Register<Window>(ConStr.MENUPANEL);
+        UIManager.Instance.Register<Window>(ConStr.LOADINGPANEL);
         UIManager.Instance.Register<HotFixUI>(ConStr.HOTFIXPANEL);
     }
 
