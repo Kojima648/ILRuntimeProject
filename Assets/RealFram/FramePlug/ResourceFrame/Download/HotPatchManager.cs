@@ -104,7 +104,7 @@ public class HotPatchManager : Singleton<HotPatchManager> {
             string filePath = m_UnPackPath + "/" + fileName;
             if (File.Exists (filePath)) {
                 string md5 = MD5Manager.Instance.BuildFileMd5 (filePath);
-                if (m_PackedMd5[fileName].Md5 != md5) {
+                if (m_PackedMd5[fileName].MD5 != md5) {
                     m_UnPackedList.Add (fileName);
                 }
             } else {
