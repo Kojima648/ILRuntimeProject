@@ -40,7 +40,7 @@ namespace HotFix_Project
             {
                 Sprite sp = obj as Sprite;
                 m_MainPanel.m_Test1.sprite = sp;
-                Debug.Log("图片1加载出来了！！！（HotFix）");
+                Debug.Log("图片1加载出来了~");
 
             }
         }
@@ -51,7 +51,7 @@ namespace HotFix_Project
             {
                 Sprite sp = obj as Sprite;
                 m_MainPanel.m_Test3.sprite = sp;
-                Debug.Log("图片3加载出来了！！！（HotFix）");
+                Debug.Log("图片3加载出来了~");
             }
         }
 
@@ -61,7 +61,7 @@ namespace HotFix_Project
             {
                 Sprite sp = obj as Sprite;
                 m_MainPanel.m_Test2.sprite = sp;
-                Debug.Log("图片2加载出来了！！！（HotFix）");
+                Debug.Log("图片2加载出来了~");
             }
         }
 
