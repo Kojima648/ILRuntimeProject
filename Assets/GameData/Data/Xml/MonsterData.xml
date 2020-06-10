@@ -5,4 +5,5 @@
   <AllMonster Id="3" Name="2sq" OutLook="Assets/GameData/Prefabs/Attack.prefab" Level="0" Rare="0" Height="4" />
   <AllMonster Id="4" Name="3sq" OutLook="Assets/GameData/Prefabs/Attack.prefab" Level="0" Rare="2" Height="5" />
   <AllMonster Id="5" Name="4sq" OutLook="Assets/GameData/Prefabs/Attack.prefab" Level="0" Rare="2" Height="6" />
+  <AllKing Id="12" Name="King" HP="100"  />
 </MonsterData>

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml.Serialization;
+using ProtoBuf;
+
+[ProtoBuf.ProtoContract]
 [System.Serializable]
 public class MonsterData : ExcelBase
 {
@@ -56,30 +59,50 @@ public class MonsterData : ExcelBase
 
     [XmlIgnore]
     public Dictionary<int, MonsterBase> m_AllMonsterDic = new Dictionary<int, MonsterBase>();
-
+    
+    [ProtoBuf.ProtoMember(1)]
     [XmlElement("AllMonster")]
     public List<MonsterBase> AllMonster { get; set; }
+    
+    [ProtoBuf.ProtoMember(2)]
+    [XmlElement("AllKing")]
+    public List<KingBase> AllKing { get; set; }
 }
-
+[ProtoBuf.ProtoContract]
+[ProtoInclude(20,typeof(KingBase))]
 [System.Serializable]
 public class MonsterBase
 {
     //ID
+    [ProtoBuf.ProtoMember(1)]
     [XmlAttribute("Id")]
     public int Id { get; set; }
     //Name
+    [ProtoBuf.ProtoMember(2)]
     [XmlAttribute("Name")]
     public string Name { get; set; }
     //预知路径
+    [ProtoBuf.ProtoMember(3)]
     [XmlAttribute("OutLook")]
     public string OutLook { get; set; }
     //怪物等级
+    [ProtoBuf.ProtoMember(4)]
     [XmlAttribute("Level")]
     public int Level { get; set; }
     //怪物稀有度
+    [ProtoBuf.ProtoMember(5)]
     [XmlAttribute("Rare")]
     public int Rare { get; set; }
     //怪物高度
+    [ProtoBuf.ProtoMember(6)]
     [XmlAttribute("Height")]
     public float Height { get; set; }
+}
+
+[ProtoContract]
+[System.Serializable]
+public class KingBase :MonsterBase
+{
+    [ProtoMember(1)] [XmlAttribute("HP")] public int HP { get; set;  }
+
 }

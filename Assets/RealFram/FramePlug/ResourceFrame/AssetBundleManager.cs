@@ -96,11 +96,6 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
             return item;
         }
 
-        if (item.m_AssetBundle != null)
-        {
-            return item;
-        }
-
         item.m_AssetBundle = LoadAssetBundle(item.m_ABName);
 
         if (item.m_DependAssetBundle != null)

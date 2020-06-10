@@ -14,10 +14,26 @@ public class DataEditor
     public static string XmlPath = RealConfig.GetRealFram().m_XmlPath;
     public static string BinaryPath = RealConfig.GetRealFram().m_BinaryPath;
     public static string ScriptsPath = RealConfig.GetRealFram().m_ScriptsPath;
+    public static string ProtobufPath = RealConfig.GetRealFram().m_ProtoBufPath;
     public static string ExcelPath = Application.dataPath + "/../Data/Excel/";
     public static string RegPath = Application.dataPath + "/../Data/Reg/";
 
 
+    [MenuItem("Tools/测试/测试Protobuf")]
+    public static void TestProtobuf()
+    {
+        string path = "Assets/GameData/Data/ProtobufData/MonsterData.bytes";
+        MonsterData data = BinarySerializeOpt.ProtoDeSerialize<MonsterData>(path);
+        foreach (var monster in data.AllMonster)
+        {
+            Debug.Log(monster.Id +" "+monster.Name +" "+ monster.OutLook);
+        }
+        foreach (var monster in data.AllKing)
+        {
+            Debug.Log(monster.Id +" "+monster.Name +" "+ monster.HP);
+        }
+    }
+    
     [MenuItem("Assets/类转xml")]
     public static void AssetsClassToXml()
     {
@@ -40,6 +56,20 @@ public class DataEditor
         {
             EditorUtility.DisplayProgressBar("文件下的xml转成二进制", "正在扫描" + objs[i].name + "... ...", 1.0f / objs.Length * i);
             XmlToBinary(objs[i].name);
+        }
+
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+    
+    [MenuItem("Assets/Xml转Protobuf")]
+    public static void AssetsXmlToProtobuf()
+    {
+        UnityEngine.Object[] objs = Selection.objects;
+        for (int i = 0; i < objs.Length; i++)
+        {
+            EditorUtility.DisplayProgressBar("文件下的xml转成二进制", "正在扫描" + objs[i].name + "... ...", 1.0f / objs.Length * i);
+            XmlToProtoBuf(objs[i].name);
         }
 
         AssetDatabase.Refresh();
@@ -81,6 +111,28 @@ public class DataEditor
         AssetDatabase.Refresh();
         EditorUtility.ClearProgressBar();
     }
+    
+    [MenuItem("Tools/Xml/Xml转成ProtoBuf")]
+    public static void AllXmlToXml转成Protobuf()
+    {
+        string path = Application.dataPath.Replace("Assets", "") + XmlPath;
+        string[] filesPath = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+        for (int i = 0; i < filesPath.Length; i++)
+        {
+            EditorUtility.DisplayProgressBar("查找文件夹下面的Xml", "正在扫描" + filesPath[i] + "... ...",
+                1.0f / filesPath.Length * i);
+            if (filesPath[i].EndsWith(".xml"))
+            {
+                string tempPath = filesPath[i].Substring(filesPath[i].LastIndexOf("/") + 1);
+                tempPath = tempPath.Replace(".xml", "");
+                XmlToProtoBuf(tempPath);
+            }
+        }
+
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
     [MenuItem("Tools/Xml/Excel转Xml")]
     public static void AllExcelToXml()
     {
@@ -1102,6 +1154,43 @@ public class DataEditor
                 object obj = BinarySerializeOpt.XmlDeserialize(xmlPath, type);
                 BinarySerializeOpt.BinarySerilize(binaryPath, obj);
                 Debug.Log(name + "xml转二进制成功，二进制路径为:" + binaryPath);
+            }
+        }
+        catch
+        {
+            Debug.LogError(name + "xml转二进制失败！");
+        }
+    }
+
+    /// <summary>
+    /// xml转 protobuf
+    /// </summary>
+    /// <param name="name"></param>
+    private static void XmlToProtoBuf(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return;
+
+        try
+        {
+            Type type = null;
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type tempType = asm.GetType(name);
+                if (tempType != null)
+                {
+                    type = tempType;
+                    break;
+                }
+            }
+
+            if (type != null)
+            {
+                string xmlPath = XmlPath + name + ".xml";
+                string protobufPath = ProtobufPath + name + ".bytes";
+                object obj = BinarySerializeOpt.XmlDeserialize(xmlPath, type);
+                BinarySerializeOpt.ProtoSerialize(protobufPath, obj);
+                Debug.Log(name + "xml转Protobuf成功，xml转Protobuf成功路径为:" + protobufPath);
             }
         }
         catch

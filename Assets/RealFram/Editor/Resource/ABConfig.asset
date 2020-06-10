@@ -21,7 +21,7 @@ MonoBehaviour:
     Path: Assets/GameData/Sounds
   - ABName: ugui
     Path: Assets/GameData/UGUI
-  - ABName: bytes
-    Path: Assets/GameData/Data/Binary
   - ABName: hotfix
     Path: Assets/GameData/Data/HotFix
+  - ABName: protobufdata
+    Path: Assets/GameData/Data/ProtoBufData
