@@ -62,12 +62,14 @@
      <Compile Include="Assets\RealFram\FramePlug\ConifigFrame\ConfigerManager.cs" />
      <Compile Include="Assets\RealFram\FramePlug\ConifigFrame\ExcelBase.cs" />
      <Compile Include="Assets\RealFram\FramePlug\GameStart.cs" />
+     <Compile Include="Assets\Scenes\Demo\Demo.cs" />
      <Compile Include="Assets\Scripts\Adapter\WindowAdapter.cs" />
      <Compile Include="Assets\Scripts\Data\BuffData.cs" />
      <Compile Include="Assets\Scripts\Data\MonsterData.cs" />
      <Compile Include="Assets\Scripts\Generated\CLRBindingTestClass_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\CLRBindings.cs" />
      <Compile Include="Assets\Scripts\Generated\ConfigerManager_Binding.cs" />
+     <Compile Include="Assets\Scripts\Generated\DemoPanel_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\GameMapManager_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\ILRuntimeManager_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\LoadingPanel_Binding.cs" />
@@ -92,12 +94,14 @@
      <Compile Include="Assets\Scripts\Generated\TestDelegateFunction_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\TestDelegateMeth_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UIManager_Binding.cs" />
+     <Compile Include="Assets\Scripts\Generated\UnityEngine_Color_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_Debug_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_GameObject_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_Input_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_MonoBehaviour_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_Object_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_Time_Binding.cs" />
+     <Compile Include="Assets\Scripts\Generated\UnityEngine_UI_Graphic_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_UI_Image_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_UI_Slider_Binding.cs" />
      <Compile Include="Assets\Scripts\Generated\UnityEngine_UI_Text_Binding.cs" />
@@ -107,6 +111,7 @@
      <Compile Include="Assets\Scripts\Manager\ILRuntimeManager.cs" />
      <Compile Include="Assets\Scripts\Manager\TestClassBasesAdapter.cs" />
      <Compile Include="Assets\Scripts\UGUI\Item\CommonConfirm.cs" />
+     <Compile Include="Assets\Scripts\UGUI\Panel\DemoPanel.cs" />
      <Compile Include="Assets\Scripts\UGUI\Panel\HotFixPanel.cs" />
      <Compile Include="Assets\Scripts\UGUI\Panel\LoadingPanel.cs" />
      <Compile Include="Assets\Scripts\UGUI\Panel\MenuPanel.cs" />
@@ -358,6 +363,9 @@
  <Reference Include="ILRuntime.Mono.Cecil.Pdb">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/ILRuntime/Plugins/ILRuntime.Mono.Cecil.Pdb.dll</HintPath>
  </Reference>
+ <Reference Include="protobuf-net">
+ <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.Analytics.Editor">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Editor.dll</HintPath>
  </Reference>
@@ -366,9 +374,6 @@
  </Reference>
  <Reference Include="Unity.Analytics.StandardEvents">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
- </Reference>
- <Reference Include="protobuf-net">
- <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>D:/Program Files/Unity2019.3.6f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

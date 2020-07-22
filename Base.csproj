@@ -264,6 +264,9 @@
  <Reference Include="ILRuntime.Mono.Cecil.Pdb">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/ILRuntime/Plugins/ILRuntime.Mono.Cecil.Pdb.dll</HintPath>
  </Reference>
+ <Reference Include="protobuf-net">
+ <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
+ </Reference>
  <Reference Include="EPPlus">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/RealFram/FramePlug/Plugins/Editor/EPPlus.dll</HintPath>
  </Reference>
@@ -278,9 +281,6 @@
  </Reference>
  <Reference Include="Unity.Analytics.StandardEvents">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
- </Reference>
- <Reference Include="protobuf-net">
- <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>D:/Program Files/Unity2019.3.6f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

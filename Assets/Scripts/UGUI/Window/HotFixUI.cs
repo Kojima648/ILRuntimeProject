@@ -99,7 +99,9 @@ public class HotFixUI : Window
     /// </summary>
     void StartOnFinish()
     {
-        GameStart.Instance.StartCoroutine(OnFinish());
+//        GameStart.Instance.StartCoroutine(OnFinish());
+//开启携程
+        Demo.Instance.StartCoroutine(OnFinish());
     }
 
     /// <summary>
@@ -108,7 +110,8 @@ public class HotFixUI : Window
     /// <returns></returns>
     IEnumerator OnFinish()
     {
-        yield return GameStart.Instance.StartCoroutine(GameStart.Instance.StartGame(m_Panel.m_Image,
+        // Demo脚本中的coroutine
+        yield return Demo.Instance.StartCoroutine(Demo.Instance.StartGameDemo(m_Panel.m_Image,
             m_Panel.m_SliderTopText));
         UIManager.Instance.CloseWnd(this);
     }

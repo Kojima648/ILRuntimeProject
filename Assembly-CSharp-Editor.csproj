@@ -318,6 +318,9 @@
  <Reference Include="ILRuntime.Mono.Cecil.Pdb">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/ILRuntime/Plugins/ILRuntime.Mono.Cecil.Pdb.dll</HintPath>
  </Reference>
+ <Reference Include="protobuf-net">
+ <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
+ </Reference>
  <Reference Include="EPPlus">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/RealFram/FramePlug/Plugins/Editor/EPPlus.dll</HintPath>
  </Reference>
@@ -332,9 +335,6 @@
  </Reference>
  <Reference Include="Unity.Analytics.StandardEvents">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
- </Reference>
- <Reference Include="protobuf-net">
- <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Assets/Plugins/protobuf-net.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>D:/Workspace/Unity3D/ILRuntimeProject/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

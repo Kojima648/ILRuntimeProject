@@ -101,7 +101,7 @@ public class ResourceManager : Singleton<ResourceManager>
     protected long m_Guid = 0;
     
     // false 为模拟模式（源资源），true 为真机模式（加载的是streaming asset 下的 AB包）
-    public bool m_LoadFormAssetBundle = true;    
+    public bool m_LoadFormAssetBundle = false;    
     
     //缓存使用的资源列表
     public Dictionary<uint, ResouceItem> AssetDic { get; set; } = new Dictionary<uint, ResouceItem>();
