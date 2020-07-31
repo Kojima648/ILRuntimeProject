@@ -21,9 +21,9 @@ namespace HotFix_Project
             {
                 Sprite sp = obj as Sprite;
                 m_demoPanel.image.sprite = sp;
-                m_demoPanel.text.text = "ADADADAADA";
-                m_demoPanel.text.color = Color.white;
-                Debug.Log(" 123~");
+                m_demoPanel.text.text = "ABCDEFG";
+                m_demoPanel.text.color = Color.blue;
+                Debug.Log("热更Debug123~");
 
             }
         }
