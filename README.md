@@ -17,4 +17,6 @@
  	7. 资源解压
 
 文档：https://zhuanlan.zhihu.com/p/142619941
-视频演示：https://www.bilibili.com/video/BV1wK411s7qH
+视频演示1：https://www.bilibili.com/video/BV1wK411s7qH  （过旧）
+视频演示2：https://www.bilibili.com/video/BV1kk4y1m7Fd/ （演示版）
+码云已上传所有项目文件，可直接打开运行
